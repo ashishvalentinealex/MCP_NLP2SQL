@@ -1,3 +1,5 @@
+![Architecture Overview](https://cdn.hashnode.com/res/hashnode/image/upload/v1746992148580/1aa31433-dc65-43cb-8eaf-1335c35a0f52.png)
+
 # Model context protocol for interacting with database using Natural Language processing 
 This project provides an **MCP (Model Context Protocol) server** that connects to a PostgreSQL  database, auto-documents the schema, and enables **natural language → SQL** querying with minimal hallucination by using strict schema validation.
 
