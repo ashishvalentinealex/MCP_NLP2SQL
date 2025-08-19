@@ -1,0 +1,168 @@
+## Table name - locations
+
+# Locations Table Schema Summary
+
+## Columns
+
+| Name            | Type         | Description                        | Example Value   |
+|-----------------|--------------|------------------------------------|-----------------|
+| location_id     | INTEGER      | Unique identifier for each location| 1               |
+| name            | VARCHAR(50)  | Name of the location               | Main Warehouse  |
+| type            | VARCHAR(20)  | Type of location (e.g., Warehouse, Zone, Rack) | Warehouse      |
+| parent_location | INTEGER      | ID of the parent location, allows hierarchical nesting | 1               |
+
+## Keys
+
+- **Primary Keys**
+  - `location_id`: Uniquely identifies each row in the table.
+
+- **Foreign Keys**
+  - `parent_location`: References `location_id` in the same `locations` table to establish a hierarchy.
+
+## Table name - products
+
+# Products Table Schema
+
+## Columns
+
+| Name         | Type           | Description                     | Example Value                     |
+|--------------|----------------|---------------------------------|-----------------------------------|
+| product_id   | INTEGER        | Unique identifier for the product | 1                                 |
+| sku          | VARCHAR(20)    | Stock Keeping Unit, unique code for product identification | SKU-1001                          |
+| name         | VARCHAR(100)   | Name of the product               | 18V Drill                         |
+| description  | TEXT           | Detailed description of the product | Cordless power drill, 2Ah battery |
+| category     | VARCHAR(50)    | Category to which the product belongs | Tools                             |
+| unit_price   | NUMERIC(10, 2) | Price per unit of the product     | 89.99                             |
+| unit_measure | VARCHAR(20)    | Measurement unit of the product    | pcs                               |
+
+## Keys
+
+- **Primary Key**: `product_id`
+- **Foreign Keys**: None
+
+## Table name - inventory
+
+# Inventory Table Schema Summary
+
+## Columns
+
+| Name             | Type      | Description                               | Example Value              |
+|------------------|-----------|-------------------------------------------|----------------------------|
+| inventory_id     | INTEGER   | Unique identifier for inventory record     | 1                          |
+| product_id       | INTEGER   | Identifier for the product                 | 2                          |
+| location_id      | INTEGER   | Identifier for the location                | 4                          |
+| quantity_on_hand | INTEGER   | Quantity of product available at location | 100                        |
+| last_updated     | TIMESTAMP | Date and time when record was last updated | 2025-07-11 13:17:29.949868 |
+
+## Keys
+
+- **Primary Keys**: 
+  - `inventory_id`
+
+- **Foreign Keys**:
+  - `product_id` references `products(product_id)`
+  - `location_id` references `locations(location_id)`
+
+## Table name - suppliers
+
+# Suppliers Table Schema Summary
+
+## Columns
+
+| Name          | Type          | Description                   | Example Value               |
+|---------------|---------------|-------------------------------|-----------------------------|
+| supplier_id   | INTEGER       | Unique identifier for supplier| 1                           |
+| name          | VARCHAR(100)  | Name of the supplier          | Acme Tools Co.              |
+| contact_name  | VARCHAR(100)  | Name of contact person        | Alice Johnson               |
+| phone         | VARCHAR(20)   | Supplier's contact phone number| 555-0101                   |
+| email         | VARCHAR(100)  | Email address of contact      | alice@acmetools.com         |
+| address       | TEXT          | Physical address of supplier  | 123 Industrial Way, Springfield |
+
+## Keys
+
+- **Primary Key**: `supplier_id`
+- **Foreign Keys**: None
+
+## Table name - purchase_orders
+
+# Purchase Orders Table Schema Summary
+
+## Columns
+
+| Name          | Type         | Description                       | Example Value |
+|---------------|--------------|-----------------------------------|---------------|
+| po_id         | INTEGER      | Unique identifier for each order  | 1             |
+| supplier_id   | INTEGER      | References the supplier           | 1             |
+| order_date    | DATE         | Date the order was placed         | 2025-07-01    |
+| expected_date | DATE         | Expected delivery date of order   | 2025-07-07    |
+| status        | VARCHAR(20)  | Current order status              | Pending       |
+
+## Keys
+
+- **Primary Key**
+  - `po_id`: Uniquely identifies each purchase order.
+
+- **Foreign Key**
+  - `supplier_id`: References `supplier_id` in the `suppliers` table.
+
+## Table name - purchase_order_lines
+
+# Table: purchase_order_lines
+
+## Columns
+
+| Name             | Type           | Description                              | Example Value |
+|------------------|----------------|------------------------------------------|---------------|
+| poline_id        | INTEGER        | Unique identifier for the purchase order line | 1             |
+| po_id            | INTEGER        | Identifier for the associated purchase order | 1             |
+| product_id       | INTEGER        | Identifier for the product               | 1             |
+| quantity_ordered | INTEGER        | Quantity of the product ordered          | 10            |
+| unit_cost        | NUMERIC(10, 2) | Cost per unit of the product             | 85.00         |
+
+## Keys
+
+- **Primary Key**: `poline_id`
+- **Foreign Keys**:
+  - `po_id` referencing `purchase_orders(po_id)`
+  - `product_id` referencing `products(product_id)`
+
+## Table name - sales_orders
+
+# Sales Orders Table Schema
+
+## Columns
+
+| Name           | Type           | Description                     | Example Value          |
+|----------------|----------------|---------------------------------|------------------------|
+| `so_id`        | INTEGER        | Unique identifier for each order| 1                      |
+| `customer_name`| VARCHAR(100)   | Name of the customer placing order| BuildPro Contractors  |
+| `order_date`   | DATE           | Date when the order was placed  | 2025-07-05             |
+| `status`       | VARCHAR(20)    | Current status of the order     | New                    |
+
+## Keys
+
+- **Primary Keys**: `so_id`
+- **Foreign Keys**: None
+
+## Table name - sales_order_lines
+
+# Table: sales_order_lines
+
+## Columns
+
+| Name              | Type           | Description                                    | Example Value |
+|-------------------|----------------|------------------------------------------------|---------------|
+| soline_id         | INTEGER        | Unique identifier for the sales order line     | 1             |
+| so_id             | INTEGER        | Identifier for the related sales order         | 1             |
+| product_id        | INTEGER        | Identifier for the product in the order line   | 1             |
+| quantity_ordered  | INTEGER        | Number of units ordered for a particular line  | 5             |
+| unit_price        | NUMERIC(10, 2) | Price per unit of the product ordered          | 95.00         |
+
+## Keys
+
+- **Primary Key**
+  - `soline_id`: Uniquely identifies each order line within the table.
+
+- **Foreign Keys**
+  - `product_id`: References `product_id` in the `products` table, ensuring the product exists.
+  - `so_id`: References `so_id` in the `sales_orders` table, linking the line to an order.

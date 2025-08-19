@@ -1,0 +1,10 @@
+[
+  "locations",
+  "products",
+  "inventory",
+  "suppliers",
+  "purchase_orders",
+  "purchase_order_lines",
+  "sales_orders",
+  "sales_order_lines"
+]
